@@ -1,0 +1,44 @@
+.textCapitalize {
+    text-transform: capitalize;
+}
+
+.p0 {
+    padding: 0 !important;
+}
+
+.px0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.pr1 {
+    padding-right: 0.5em;
+}
+
+.flexBetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flexVertical {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.flexVerticalCenter {
+     display: flex;
+     align-items: center;
+ }
+
+.flexCenter {
+    display: flex;
+    align-items: center;
+    min-width: 50%;
+    max-width: 75%;
+}
+
+.sortBtnHeight {
+    line-height: 1;
+    height: 20px;
+}
