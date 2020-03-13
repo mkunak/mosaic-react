@@ -3,8 +3,8 @@ import uuid from 'react-uuid';
 
 import THeadCell from './THeadCell';
 import TBodyRows from "./TBodyRows";
-import {getArrayFromObjectKeys} from '../../utils/getArrayFromObjectKeys';
 
+import {getArrayFromObjectKeys} from '../../utils/getArrayFromObjectKeys';
 import s from './Table.module.scss';
 
 class Table extends Component {
@@ -51,8 +51,8 @@ class Table extends Component {
       
       if (birthdaySortType === '3') {
         sortFn = (a, b) => {
-          const dateA = new Date(a[colName]);
-          const dateB = new Date(b[colName]);
+          const dateA = Date.parse(a[colName]);
+          const dateB = Date.parse(b[colName]);
           
           if (sortType === "sortAZ") return dateA - dateB;
           if (sortType === "sortZA") return dateB - dateA;
