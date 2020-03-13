@@ -23,7 +23,6 @@ class Table extends Component {
   }
   
   onSortChange = (colName, sortType) => {
-    console.log(colName, sortType);
     const {birthdaySortType} = this.state;
     let sortFn;
     
@@ -85,7 +84,6 @@ class Table extends Component {
   };
   
   onSelectChange = (e) => {
-    console.log(e.target.value);
     this.setState({birthdaySortType: e.target.value});
   };
   
@@ -94,7 +92,7 @@ class Table extends Component {
       delete item._id;
       return item;
     });
-    console.log(data);
+    
     const {sortFn, birthdaySortType} = this.state;
     
     const tHeadContent = getArrayFromObjectKeys(data[0]);
