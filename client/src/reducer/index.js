@@ -2,39 +2,40 @@ import {
   FETCH_All_PERSONNEL_REQUEST,
   FETCH_All_PERSONNEL_SUCCESS,
   FETCH_All_PERSONNEL_FAILURE,
-} from '../constants';
+} from "../constants";
 
 const updatePersonnelData = (state, action) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === "undefined") {
     return {
       allPersonnel: [],
+      sortingButtons: [],
       loading: false,
-      error: null,
+      error: null
     };
   }
-  
+
   switch (action.type) {
     case FETCH_All_PERSONNEL_REQUEST:
       return {
-        ...state.allPersonnel,
-        loading: true,
+        ...state,
+        loading: true
       };
-      
+
     case FETCH_All_PERSONNEL_SUCCESS:
       return {
-        ...state.allPersonnel,
+        ...state,
         allPersonnel: action.payload,
-        loading: false,
+        loading: false
       };
-      
+
     case FETCH_All_PERSONNEL_FAILURE:
       return {
-        ...state.allPersonnel,
-        error: action.payload,
+        ...state,
+        error: action.payload
       };
-      
+
     default:
-      return state.allPersonnel;
+      return state;
   }
 };
 

@@ -1,136 +1,129 @@
-import React, {Component} from 'react';
-import uuid from 'react-uuid';
+import React, {Component} from "react";
+import uuid from "react-uuid";
 
-import THeadCell from './THeadCell';
+import THeadCell from "./THeadCell";
 import TBodyRows from "./TBodyRows";
 
-import {getArrayFromObjectKeys} from '../../utils/getArrayFromObjectKeys';
-import s from './Table.module.scss';
+import {sortToolbox} from "../../utils/sortToolbox";
+import {getArrayFromObjectKeys} from "../../utils/getArrayFromObjectKeys";
+
+import s from "./Table.module.scss";
 
 class Table extends Component {
   state = {
-    birthdaySortType: '3',
-    sortFn: undefined,
-    sortType: '',
-    colName: ''
+    btnBg: "",
+    indx: null,
+    colName: "",
+    sortType: "",
+    birthdaySortType: "0",
+    currentSort: "default",
+    sortFn: sortToolbox.sort.strings
   };
   
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const {colName, sortType, birthdaySortType} = this.state;
+  componentDidUpdate(prevProps, prevState) {
+    const {colName, sortType, birthdaySortType, indx} = this.state;
     if (prevState.birthdaySortType !== birthdaySortType) {
       this.onSortChange(colName, sortType);
     }
+    
+    if (prevState.indx !== indx) {
+      this.onSortChange(colName, indx, "default");
+    }
   }
   
-  onSortChange = (colName, sortType) => {
+  onSortChange = (colName, indx, sortType) => {
+    const currentSort = sortType || this.state.currentSort;
     const {birthdaySortType} = this.state;
-    let sortFn;
+    let nextSort;
     
-    if (colName.toLowerCase() === 'birthday_contact') {
-      if (birthdaySortType === '1') {
-        sortFn = (a, b) => {
-          const dateA = Number(a[colName].split('-')[2]);
-          const dateB = Number(b[colName].split('-')[2]);
-          
-          if (sortType === "sortAZ") return dateA - dateB;
-          if (sortType === "sortZA") return dateB - dateA;
-          return 0;
-        };
+    const btns = document.querySelectorAll(".btn-sort");
+    btns.forEach((elem, index) => {
+      if (index === indx) {
+        elem.classList.remove("red");
+        elem.classList.add("red");
+        this.setState({btnBg: "red", indx});
       }
-      
-      if (birthdaySortType === '2') {
-        sortFn = (a, b) => {
-          const dateA = Number(a[colName].split('-')[1]);
-          const dateB = Number(b[colName].split('-')[1]);
-          
-          if (sortType === "sortAZ") return dateA - dateB;
-          if (sortType === "sortZA") return dateB - dateA;
-          return 0;
-        };
+    });
+    
+    if (currentSort === "ZA") nextSort = "AZ";
+    else if (currentSort === "AZ") nextSort = "default";
+    else if (currentSort === "default") nextSort = "ZA";
+    
+    this.setState({currentSort: nextSort});
+    
+    if (colName.toLowerCase() === "birthday_contact") {
+      if (birthdaySortType === "1") {
+        this.setState({sortFn: sortToolbox.sort.byDay, colName});
+      } else if (birthdaySortType === "2") {
+        this.setState({sortFn: sortToolbox.sort.byMonth, colName});
+      } else {
+        this.setState({sortFn: sortToolbox.sort.byDate, colName});
       }
-      
-      if (birthdaySortType === '3') {
-        sortFn = (a, b) => {
-          const dateA = Date.parse(a[colName]);
-          const dateB = Date.parse(b[colName]);
-          
-          if (sortType === "sortAZ") return dateA - dateB;
-          if (sortType === "sortZA") return dateB - dateA;
-          return 0;
-        };
-      }
-    } else if (colName.toLowerCase() === 'phonenumber') {
-      sortFn = (a, b) => {
-        if (sortType === "sortAZ") return +a[colName] - +b[colName];
-        if (sortType === "sortZA") return +b[colName] - +a[colName];
-      };
+    } else if (colName.toLowerCase() === "phonenumber") {
+      this.setState({sortFn: sortToolbox.sort.numbers, colName});
     } else {
-      sortFn = (a, b) => {
-        if (sortType === "sortAZ") {
-          if (a[colName] > b[colName]) return 1;
-          if (a[colName] < b[colName]) return -1;
-          return 0;
-        }
-        
-        if (sortType === "sortZA") {
-          if (b[colName] > a[colName]) return 1;
-          if (b[colName] < a[colName]) return -1;
-          return 0;
-        }
-      }
+      this.setState({sortFn: sortToolbox.sort.strings, colName});
     }
-    
-    this.setState({sortFn, colName, sortType});
   };
   
-  onSelectChange = (e) => {
+  onSelectChange = e => {
     this.setState({birthdaySortType: e.target.value});
   };
   
   render() {
-    const data = this.props.data.map((item) => {
+    const data = this.props.allPersonnel.map(item => {
       delete item._id;
       return item;
     });
     
-    const {sortFn, birthdaySortType} = this.state;
+    const {
+      indx,
+      btnBg,
+      sortFn,
+      colName,
+      currentSort,
+      birthdaySortType
+    } = this.state;
     
     const tHeadContent = getArrayFromObjectKeys(data[0]);
-    const tableHead = tHeadContent.map((item) => {
+    const tableHead = tHeadContent.map((item, index) => {
       return (
         <THeadCell
-          key={uuid()}
           styles={s}
           item={item}
+          key={uuid()}
+          index={index}
+          btnBg={index === indx ? btnBg : ""}
+          icon={
+            index === indx
+              ? sortToolbox[currentSort].icon
+              : sortToolbox["default"].icon
+          }
           value={birthdaySortType}
+          currentSort={currentSort}
           onSortChange={this.onSortChange}
-          onSelectChange={this.onSelectChange}/>
+          onSelectChange={this.onSelectChange}
+        />
       );
     });
     
-    const tableFoot = tHeadContent.map((item) => {
-      return (
-        <THeadCell key={uuid()} styles={s} item={item} tfoot/>
-      );
+    const tableFoot = tHeadContent.map(item => {
+      return <THeadCell key={uuid()} styles={s} item={item} tfoot/>;
     });
     
     return (
       <>
         <table className="highlight">
           <thead>
-          <tr className={s.textCapitalize}>
-            {tableHead}
-          </tr>
+          <tr className={s.textCapitalize}>{tableHead}</tr>
           </thead>
           
           <tfoot>
-          <tr className={s.textCapitalize}>
-            {tableFoot}
-          </tr>
+          <tr className={s.textCapitalize}>{tableFoot}</tr>
           </tfoot>
           
           <tbody>
-          <TBodyRows data={data.sort(sortFn)}/>
+          <TBodyRows data={data.sort(sortFn(colName, currentSort))}/>
           </tbody>
         </table>
       </>

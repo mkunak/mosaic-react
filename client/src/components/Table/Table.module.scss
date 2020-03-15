@@ -1,44 +1,49 @@
 .textCapitalize {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 .p0 {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 .px0 {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .pr1 {
-    padding-right: 0.5em;
+  padding-right: 0.5em;
 }
 
 .flexBetween {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .flexVertical {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .flexVerticalCenter {
-     display: flex;
-     align-items: center;
- }
+  display: flex;
+  align-items: center;
+}
 
 .flexCenter {
-    display: flex;
-    align-items: center;
-    min-width: 50%;
-    max-width: 75%;
+  display: flex;
+  align-items: center;
+  min-width: 50%;
+  max-width: 75%;
 }
 
 .sortBtnHeight {
-    line-height: 1;
-    height: 20px;
+  line-height: 1;
+//   height: 20px;
+
+}
+
+.sortBtnActive {
+  background-color: #ef9a9a;
 }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {BrowserRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
@@ -9,8 +9,8 @@ import {withServices} from "../../components/Hoc";
 import {compose} from "../../utils/compose";
 import {fetchToGetAllPersonnel} from "../../actions";
 
-import 'materialize-css';
-import s from './AppContainer.module.scss';
+import "materialize-css";
+import s from "./AppContainer.module.scss";
 
 class AppContainer extends Component {
   componentDidMount() {
@@ -20,13 +20,19 @@ class AppContainer extends Component {
   render() {
     const {loading, allPersonnel} = this.props;
     
+    console.log(allPersonnel);
+    
     return (
       <BrowserRouter>
         <div className="container">
           <h1 className={`${s.header} red lighten-3`}>
             <span>Employees</span>
           </h1>
-          {(loading || !allPersonnel) ? <Loader/> : <Table data={allPersonnel}/>}
+          {loading || !allPersonnel || !allPersonnel.length ? (
+            <Loader/>
+          ) : (
+            <Table {...this.props} />
+          )}
         </div>
       </BrowserRouter>
     );
@@ -35,15 +41,18 @@ class AppContainer extends Component {
 
 const mapStateToProps = ({allPersonnel, loading}) => {
   return {
-    allPersonnel,
     loading,
+    allPersonnel
   };
 };
 
 const mapDispatchToProps = (dispatch, {Services}) => {
   return {
-    fetchToGetAllPersonnel: fetchToGetAllPersonnel(Services, dispatch),
+    fetchToGetAllPersonnel: fetchToGetAllPersonnel(Services, dispatch)
   };
 };
 
-export default compose(withServices(), connect(mapStateToProps, mapDispatchToProps))(AppContainer);
+export default compose(
+  withServices(),
+  connect(mapStateToProps, mapDispatchToProps)
+)(AppContainer);

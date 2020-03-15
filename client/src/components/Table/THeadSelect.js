@@ -24,10 +24,9 @@ const THeadSelect = ({value, onChange}) => {
         }
       }}
       value={value}>
-      <option disabled value="">Sort by</option>
+      <option disabled value="0">Sort by</option>
       <option value="1">Day</option>
       <option value="2">Month</option>
-      <option value="3">Default</option>
     </Select>);
 };
 
