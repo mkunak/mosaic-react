@@ -1,6 +1,6 @@
 export const sortToolbox = {
   AZ: {
-    icon: "change_history",
+    icon: "keyboard_arrow_up",
     fn: (a, b) => a - b,
     sFn: (a, b) => {
       if (a > b) return 1;
@@ -10,7 +10,7 @@ export const sortToolbox = {
   },
 
   ZA: {
-    icon: "details",
+    icon: "keyboard_arrow_down",
     fn: (a, b) => b - a,
     sFn: (a, b) => {
       if (b > a) return 1;
